@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Weather App</h1>
+    <input type="text" id="cityinput" placeholder="Enter the City Name">
+    <button id="submitbtn">Check</button>
+    <div id="show">
+        <h2 id="name"></h2>
+        <p id="temp"></p>
+        <p id="description"></p>           
+    </div>
+</body>
+<script>
+    const apikey = "21817084c8ca50a6a466e6eb3ac1b11c"
+    const cityinput = document.getElementById('cityinput')
+    const submitbtn = document.getElementById('submitbtn')
+    const show = document.getElementById('show')
+    const city_name = document.getElementById('name')
+    const temp = document.getElementById('temp')
+    const description = document.getElementById('description')
+    submitbtn.addEventListener('click',function(){
+        const inputvalue = cityinput.value
+        getweather(inputvalue)
+        
+        // console.log(inputvalue)
+    })
+    async function getweather(inputvalue) {
+        try{
+            const apicall = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${inputvalue}&appid=${apikey}&units=metric`)
+            const data = await apicall.json()
+            console.log(data)
+            if (!apicall.ok){
+                throw new Error("city not found!")
+            }
+            const data_name = data.name
+            const data_temp = data.main.temp
+            const data_description = data.weather[0].description
+            city_name.innerText = data_name
+            temp.innerText = `tempature = ${data_temp} degree celisus`
+            description.innerText = data_description
+            // city_name.appendchild(data_name)
+            // temp.appendChild(data_temp)
+            // description.appendChild(data_description)
+        }
+        catch (error){
+            console.log(error.message)
+        }
+    }
+</script>
+</html>
